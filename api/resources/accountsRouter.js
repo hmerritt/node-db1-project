@@ -14,4 +14,15 @@ router.get("/", async (req, res, next) => {
     }
 });
 
+//  Get all accounts
+router.get("/:id", async (req, res, next) => {
+    try {
+        const accounts = await db.get(req.params.id);
+        res.send(accounts);
+    }
+    catch (err) {
+        next(err);
+    }
+});
+
 module.exports = router;
