@@ -4,34 +4,22 @@ const db = require("./accountsDb");
 const router = express.Router();
 
 //  Get all accounts
-router.get("/", async (req, res, next) => {
-    try {
-        const accounts = await db.get();
-        res.send(accounts);
-    }
-    catch (err) {
-        next(err);
-    }
+router.get("/", db.validateId(), async (req, res, next) => {
+    res.send(req.account);
 });
 
 //  Get individial account
-router.get("/:id", async (req, res, next) => {
-    try {
-        const accounts = await db.get(req.params.id);
-        res.send(accounts);
-    }
-    catch (err) {
-        next(err);
-    }
+router.get("/:id", db.validateId(), async (req, res, next) => {
+    res.send(req.account);
 });
 
 //  Create a new account
-router.post("/", async (req, res, next) => {
+router.post("/", db.validateBody(), async (req, res, next) => {
     try {
-        const [account_id] = await db.insert(req.body);
+        const [account_id] = await db.insert(req.accountBody);
         res.json({
             id: account_id,
-            ...req.body
+            ...req.accountBody
         });
     }
     catch (err) {
@@ -40,12 +28,12 @@ router.post("/", async (req, res, next) => {
 });
 
 //  Update an account
-router.put("/:id", async (req, res, next) => {
+router.put("/:id", db.validateBody(), db.validateId(), async (req, res, next) => {
     try {
-        const account = await db.update(req.params.id, req.body);
+        const account = await db.update(req.account.id, req.accountBody);
         res.json({
-            id: req.params.id,
-            ...req.body
+            id: req.account.id,
+            ...req.accountBody
         });
     }
     catch (err) {
@@ -54,12 +42,12 @@ router.put("/:id", async (req, res, next) => {
 });
 
 //  Delete an account
-router.delete("/:id", async (req, res, next) => {
+router.delete("/:id", db.validateId(), async (req, res, next) => {
     try {
-        const account = await db.remove(req.params.id);
+        const account = await db.remove(req.account.id);
         if (account) {
             res.json({
-                message: `Account {${req.params.id}} deleted successfully`
+                message: `Account {${req.account.id}} deleted successfully`
             });
         }
         else
