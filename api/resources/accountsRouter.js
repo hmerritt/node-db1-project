@@ -25,6 +25,20 @@ router.get("/:id", async (req, res, next) => {
     }
 });
 
+//  Create a new account
+router.post("/", async (req, res, next) => {
+    try {
+        const [account_id] = await db.insert(req.body);
+        res.json({
+            id: account_id,
+            ...req.body
+        });
+    }
+    catch (err) {
+        next(err);
+    }
+});
+
 //  Delete an account
 router.delete("/:id", async (req, res, next) => {
     try {

@@ -15,10 +15,15 @@ function get(id=null) {
     }
 }
 
+//  Create a new account
+function insert(account) {
+    return db("accounts").insert(account);
+}
+
 //  Delete account
 function remove(id) {
     return db("accounts").where("id", id).del();
 }
 
 
-module.exports = {get, remove};
+module.exports = {get, remove, insert};
