@@ -6,7 +6,7 @@ const router = express.Router();
 //  Get all accounts
 router.get("/", async (req, res, next) => {
     try {
-        const accounts = await db.get_all();
+        const accounts = await db.get();
         res.send(accounts);
     }
     catch (err) {
