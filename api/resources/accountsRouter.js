@@ -39,6 +39,20 @@ router.post("/", async (req, res, next) => {
     }
 });
 
+//  Update an account
+router.put("/:id", async (req, res, next) => {
+    try {
+        const account = await db.update(req.params.id, req.body);
+        res.json({
+            id: req.params.id,
+            ...req.body
+        });
+    }
+    catch (err) {
+        next(err);
+    }
+});
+
 //  Delete an account
 router.delete("/:id", async (req, res, next) => {
     try {
